@@ -1,0 +1,48 @@
+{
+    "name": "stream-file-builder",
+    "version": "0.0.1",
+    "description": "The lambda, reconstructs a file from chunks, recieved through kinesis stream and posts it to the specified url",
+    "main": "dist/lambda.js",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint 'src/**' 'test/**'",
+        "unit": "jest",
+        "test": "npm run unit",
+        "package": "./bin/package-build"
+    },
+    "keywords": [
+        "node",
+        "lamda",
+        "typescript"
+    ],
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "22.2.3",
+        "@types/randomstring": "^1.1.6",
+        "@typescript-eslint/eslint-plugin": "^2.24.0",
+        "@typescript-eslint/parser": "^2.24.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb": "^18.0.1",
+        "eslint-plugin-import": "^2.20.1",
+        "eslint-plugin-typescript": "^0.14.0",
+        "jest": "^25.1.0",
+        "nock": "^12.0.2",
+        "randomstring": "^1.1.5",
+        "typescript-eslint-parser": "^20.1.1"
+    },
+    "dependencies": {
+        "@types/aws-sdk": "2.7.0",
+        "@types/js-base64": "^2.3.1",
+        "@types/node": "^13.9.0",
+        "@types/request-promise": "^4.1.45",
+        "aws-sdk": "2.636.0",
+        "inversify": "^5.0.1",
+        "js-base64": "^2.5.2",
+        "jsonschema": "^1.2.5",
+        "reflect-metadata": "^0.1.13",
+        "request-promise": "^4.2.5",
+        "sanitize-filename": "^1.6.3",
+        "ts-jest": "^25.2.1",
+        "typescript": "^3.8.3"
+    }
+}

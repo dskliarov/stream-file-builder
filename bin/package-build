@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+default_export_dir="./package"
+
+function compile_artifacts {
+    cp -R ./dist ${default_export_dir}
+    cp -R node_modules ${default_export_dir}
+
+    cd ${default_export_dir} && zip -r artifacts . 
+    ls | grep -v artifacts.zip | xargs rm -rf
+}
+
+compile_artifacts
+ls ../${default_export_dir}
+exit 0

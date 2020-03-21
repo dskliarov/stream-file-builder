@@ -27,7 +27,7 @@ Kinesis records will be buffered to avoid invoking lambda function for every rec
 
 ## The brief description of the solution architecture
 
-Lambda package will contain following components:
+Lambda package contains following components:
 
   * Request validator
   * Cache
@@ -48,17 +48,26 @@ Cache component is in-memory key/value store.
 Object stored is a Set<number>, which will contain processed partition numbers.
 
 #### Component API
-    Push partition number to the Set stored with processed "putEndpoint" key
-  * push(key: string, chunkNumber: number): Promise<Set<number>>;
 
-    Retreive Set object stored with "putEndpoint" key
-  * get(key: string): Promise<Set<number>>;
+  Push partition number to the Set stored with processed "putEndpoint" key
+  ```
+  push(key: string, chunkNumber: number): Promise<Set<number>>;
+  ```
 
-    Delete object stored with "putEndpoint" key
-  * delete(key: string): Promise<boolean>;
+  Retreive Set object stored with "putEndpoint" key
+  ```
+  get(key: string): Promise<Set<number>>;
+  ```
 
-    Retrieve all "putEndpoint" keys, stored in cache    
-  * allKeys(): Promise<string[]>;
+  Delete object stored with "putEndpoint" key
+  ```
+  delete(key: string): Promise<boolean>;
+  ```
+
+  Retrieve all "putEndpoint" keys, stored in cache    
+  ```
+  allKeys(): Promise<string[]>;
+  ```
 
 ## Local storage
 Local storage will save payload content in a local file system in a file with "putEndpoint"-partition filename
@@ -66,29 +75,42 @@ Files will be stored in /temp directory of lambda container. Data will survive b
 is "warm". Function is not relying on local data and will store all uprocessed data in AWS S3.
 
 #### Component API
-    "putEndpoint" will be sanitize to remove incompatible characters
 
-    Store content in a file for "putEndpoint" and partition number
-  * put(key: string, chunkNumber: number, chunk: string): Promise<boolean>;
+  "putEndpoint" will be sanitize to remove incompatible characters
 
-    Read content from file with "putEndpoint"-partition filename
-  * get(key: string, chunkNumber: number): Promise<string>;
+  Store content in a file for "putEndpoint" and partition number
+  ```
+  put(key: string, chunkNumber: number, chunk: string): Promise<boolean>;
+  ```
+
+  Read content from file with "putEndpoint"-partition filename
+  ```
+  get(key: string, chunkNumber: number): Promise<string>;
+  ```
   
-    Delete file with "putEndpoint"-partition filename
-  * delete(key: string, chunkNumber: number): Promise<boolean>;
+  Delete file with "putEndpoint"-partition filename
+  ```
+  delete(key: string, chunkNumber: number): Promise<boolean>;
+  ```
 
 ## Remote storage
 Remote storage is an AWS S3 object store. List of objects with a model {partition: number, content: string} will be stored per "putEndpoint" as a key
 
 #### Component API
-    Store objects with "putEndpoint" key
-  * put(key: string, chunks: Chunk[]): Promise<boolean>;
+  Store objects with "putEndpoint" key
+  ```
+  put(key: string, chunks: Chunk[]): Promise<boolean>;
+  ```
 
-    Read object stored with the "putEndpoint" key
-  * get(key: string): Promise<Chunk[]>;
+  Read object stored with the "putEndpoint" key
+  ```
+  get(key: string): Promise<Chunk[]>;
+  ```
 
-    Remove object stored with "putEndpoint" key
-  * delete(key: string): Promise<boolean>;
+  Remove object stored with "putEndpoint" key
+  ```
+  delete(key: string): Promise<boolean>;
+  ```
 
 
 ## Config
@@ -96,11 +118,15 @@ Configuration component is a helper component, which read configuration from Env
 
 #### Component API
 
-    S3 Bucket name, setup in S3_BUCKET Environment variable
-  * s3Bucket(): string;
+  S3 Bucket name, setup in S3_BUCKET Environment variable
+  ```
+  s3Bucket(): string;
+  ```
 
-    Log level, setup in LOG_LEVEL Environment variable. Setting will allow to change Log Level to enable tracing and debugging and avoid the noise in production 
-  * logLevel(): Level;
+  Log level, setup in LOG_LEVEL Environment variable. Setting will allow to change Log Level to enable tracing and debugging and avoid the noise in production 
+  ```
+  logLevel(): Level;
+  ```
 
 
 ## Basic flow description
@@ -116,7 +142,6 @@ On a positive side, this solution will minimize calls to the AWS S3. This is ver
 
 ## Suggested improvements for scalable, multi-shards solution
 In case of parallel batch processing, Cache and local storage as it implemented in current solution must be refactored to use Dynamo DB or Redis. The maximum size of the Kinesis packet will not exceed 1MB, so the data volume will not be a concerne. In case of object with large amount partitions, we can use multi-part S3 uploads. 
-
 
 ## Available commands
 
